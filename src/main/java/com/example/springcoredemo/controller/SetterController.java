@@ -1,0 +1,22 @@
+package com.example.springcoredemo.controller;
+
+import com.example.springcoredemo.service.FooService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Controller;
+
+@Controller
+public class SetterController {
+
+    private FooService fooService;
+
+    @Autowired
+    public void setFooService(FooService fooService) {
+        this.fooService = fooService;
+    }
+
+    @Scheduled(fixedRate = 1000)
+    public void calculate() {
+        fooService.print5();
+    }
+}
