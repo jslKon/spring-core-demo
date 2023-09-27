@@ -9,6 +9,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.lang.reflect.Field;
+
 @ExtendWith(MockitoExtension.class)
 public class AutowireControllerTest {
 
@@ -25,8 +27,13 @@ public class AutowireControllerTest {
     }
 
     @Test
-    void testCalculate_withMock() {
+    void testCalculate_withMock() throws NoSuchFieldException, IllegalAccessException {
         Mockito.when(foo1Service.get5()).thenReturn(5);
         Assertions.assertEquals(10, autowireControllerMock.calculate());
+
+        Field fooField = autowireControllerMock.getClass().getDeclaredField("foo1Service");
+        fooField.setAccessible(true);
+        fooField.set(autowireControllerMock, null);
+        Assertions.assertThrows(NullPointerException.class, autowireControllerMock::calculate);
     }
 }
